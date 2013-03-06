@@ -13,10 +13,19 @@ import java.util.List;
  */
 public class AnalizadorLexico {
 	
-	private List<Token> tokens = new ArrayList<>();
-	private final String cadenaAnalizar;
+	//------ Atributos por línea.
+	private String cadenaAnalizar;
 	private int indiceCaracterActual;
 	private int regresoBacktracking;
+
+	//------ Atributos para todo el análisis.
+	private final String[] codigoAnalizar;
+	private int lineaActual;
+	private List<Token> tokens = new ArrayList<>();
+	
+	//------ Tabla de símbolos y lista de errores.
+	private TablaSimbolos tablaSimbolos = new TablaSimbolos();
+	private List<Error> errores = new ArrayList<Error>();
 	
 	/**
 	 *  Se escoge una constante de forma arbitraria para representar
@@ -30,8 +39,8 @@ public class AnalizadorLexico {
 		Arrays.sort(CARACTERES_BLANCO);
 	}
 	
-	public AnalizadorLexico(String cadenaAnalizar) {
-		this.cadenaAnalizar = cadenaAnalizar;
+	public AnalizadorLexico(String[] codigoAnalizar) {
+		this.codigoAnalizar = codigoAnalizar;
 	}
 	
 	public List<Token> getTokens() {
@@ -40,26 +49,79 @@ public class AnalizadorLexico {
 	
 	public List<Token> analizar() {
 		
-		while (indiceCaracterActual < cadenaAnalizar.length()) {
-			Token tokenActual = aceptarEntero();
-			if(tokenActual == null) {
-				tokenActual = aceptarDecimal();
-			}
-			if(tokenActual == null) {
-				tokenActual = aceptarSeparador();
-			}
+		if(codigoAnalizar != null)
+		for (int i = 0; i < codigoAnalizar.length; i++) {
+
+			avanzarLinea();
 			
-			if(tokenActual == null) {
-				consumirEspacioBlanco();
-			}
-			else {
-				tokens.add(tokenActual);
+			while (indiceCaracterActual < cadenaAnalizar.length()) {
+				
+				if(isCaracterBlanco(getCaracterActual())) {
+					consumirEspacioBlanco();
+					if(getCaracterActual() == EOF) {
+						break;
+					}
+				}
+				
+				Token tokenActual = aceptarEntero();
+				if(tokenActual == null) {
+					tokenActual = aceptarDecimal();
+				}
+				if(tokenActual == null) {
+					tokenActual = aceptarSeparador();
+				}
+				
+				// Si no se encontró ninguna categoría léxica se reporta el error.
+				if(tokenActual == null) {
+					errores.add(new Error(lineaActual, indiceCaracterActual,
+						"No se ha encontrado una categoría léxica para el token"));
+					
+					if(!isCaracterBlanco(getCaracterActual())) {
+						irInicioSiguienteToken();
+					}
+				}
+				// Sino se agrega el token a la lista.
+				else {
+					tokens.add(tokenActual);
+					instalarTokenTablaSimbolos(tokenActual);
+				}
 			}
 		}
 		
 		return getTokens();
 	}
+
+	private void instalarTokenTablaSimbolos(Token token) {
+		
+		if(		token.getTipo() == Tipo.DECIMAL
+			|| 	token.getTipo() == Tipo.ENTERO) {
+			String valor = tablaSimbolos.agregarSimbolo(token.getTipo(),
+				new Simbolo(token.getLexema()));
+			token.setValor(valor);
+		}
+		
+	}
 	
+	private void avanzarLinea() {
+		indiceCaracterActual = 0;
+		regresoBacktracking = 0;
+		lineaActual++;
+		cadenaAnalizar = codigoAnalizar[lineaActual - 1];
+	}
+
+	/**
+	 * Navega al inicio del siguiente token o a EOF.
+	 */
+	private void irInicioSiguienteToken() {
+		boolean encontroEspacio = false;
+		do {
+			irSiguienteCaracter();
+			if(isCaracterBlanco(getCaracterActual())) {
+				encontroEspacio = true;
+			}
+		}while(isCaracterBlanco(getCaracterActual()) || !encontroEspacio && getCaracterActual() != EOF);
+	}
+
 	private void consumirEspacioBlanco() {
 		// Si no es un caracter en blanco se rechaza.
 		if(!isCaracterBlanco(getCaracterActual())) {
@@ -83,14 +145,14 @@ public class AnalizadorLexico {
 		establecerRegresoBacktracking();
 		
 		// Lexema recuperado.
-		String valor = "";
+		String lexema = "";
 		
 		if(!Character.isDigit(getCaracterActual())) {
 			return null;
 		}
 		else {
 			// Estado 1.
-			valor += getCaracterActual();
+			lexema += getCaracterActual();
 			
 			do {
 				// Se consume los digitos.
@@ -98,7 +160,7 @@ public class AnalizadorLexico {
 				
 				// Se puede haber llegado al caracter que rompe el ciclo.
 				if(Character.isDigit(getCaracterActual())) {
-					valor += getCaracterActual();
+					lexema += getCaracterActual();
 				}
 			}while(Character.isDigit(getCaracterActual()));
 			
@@ -109,7 +171,7 @@ public class AnalizadorLexico {
 			}
 			else {
 				// Se acepta el token y se retorna.
-				return new Token(Tipo.ENTERO, valor);
+				return new Token(Tipo.ENTERO, lexema);
 			}
 		}
 	}
@@ -117,14 +179,14 @@ public class AnalizadorLexico {
 	private Token aceptarDecimal() {
 		
 		// Lexema recuperado.
-		String valor = "";
+		String lexema = "";
 		
 		if(!Character.isDigit(getCaracterActual())) {
 			return null;
 		}
 		else {
 			// Estado 1.
-			valor += getCaracterActual();
+			lexema += getCaracterActual();
 			
 			do {
 				// Se consume los digitos.
@@ -132,7 +194,7 @@ public class AnalizadorLexico {
 
 				// Se puede haber llegado al caracter que rompe el ciclo.
 				if(Character.isDigit(getCaracterActual())) {
-					valor += getCaracterActual();
+					lexema += getCaracterActual();
 				}
 			}while(Character.isDigit(getCaracterActual()));
 			
@@ -141,7 +203,7 @@ public class AnalizadorLexico {
 				return null;
 			}
 			else {
-				valor += getCaracterActual();
+				lexema += getCaracterActual();
 				irSiguienteCaracter();
 				// Estado 2.
 				if(!Character.isDigit(getCaracterActual())) {
@@ -150,7 +212,7 @@ public class AnalizadorLexico {
 				}
 				else {
 					// Estado 3.
-					valor += getCaracterActual();
+					lexema += getCaracterActual();
 					
 					do {
 						// Se consume los digitos.
@@ -159,12 +221,12 @@ public class AnalizadorLexico {
 						
 						// Se puede haber llegado al caracter que rompe el ciclo.
 						if(Character.isDigit(getCaracterActual())) {
-							valor += getCaracterActual();
+							lexema += getCaracterActual();
 						}
 					}while(Character.isDigit(getCaracterActual()));
 					
 					// Se acepta el token y se retorna.
-					return new Token(Tipo.DECIMAL, valor);
+					return new Token(Tipo.DECIMAL, lexema);
 				}
 			}
 		}
@@ -179,7 +241,9 @@ public class AnalizadorLexico {
 		else {
 			// Se acepta el token y se retorna.
 			irSiguienteCaracter();
-			return new Token(Tipo.SEPARADOR, ",");
+			Token token = new Token(Tipo.SEPARADOR, ",");
+			token.setValor("separador");
+			return token;
 		}
 	}
 	
@@ -199,6 +263,14 @@ public class AnalizadorLexico {
 		return indiceCaracterActual >= cadenaAnalizar.length() ?
 				EOF :
 				cadenaAnalizar.charAt(indiceCaracterActual);
+	}
+
+	public TablaSimbolos getTablaSimbolos() {
+		return tablaSimbolos;
+	}
+
+	public List<Error> getErrores() {
+		return errores;
 	}
 
 }

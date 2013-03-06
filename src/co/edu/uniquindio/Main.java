@@ -1,5 +1,6 @@
 package co.edu.uniquindio;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Main {
@@ -12,26 +13,21 @@ public class Main {
 	 * + Separador de parámetros:  ,
 	 */
 	public static void main(String[] args) {
-		/*
-		 * Resultado esperado:
-		 * Token entero:    1 - 2 - 3
-		 * Token decimal:   12.34
-		 * Token entero:    1 - 2 - 3
-		 * Token decimal:   43.21
-		 * Token separador: ,
-		 * Token entero:    1
-		 * Token separador: ,
-		 * Token entero:    2
-		 * Token separador: ,
-		 * Token entero:    3
-		 */
-		final String CADENA_ANALIZAR = 
-				"1 2 3 12.34 1 2 3 43.21 , 1,2,3";
+		
+		final String CODIGO_ANALIZAR[] = new LectorFuente().leer(); 
 
-		AnalizadorLexico analizadorLexico = new AnalizadorLexico(CADENA_ANALIZAR);
+		System.out.println(Arrays.toString(CODIGO_ANALIZAR));
+		System.out.println();
+		
+		AnalizadorLexico analizadorLexico = new AnalizadorLexico(CODIGO_ANALIZAR);
 		List<Token> tokens = analizadorLexico.analizar();
 
-		System.out.println(tokens);
+		TablaSimbolos tablaSimbolos = analizadorLexico.getTablaSimbolos();
+		List<Error> errores = analizadorLexico.getErrores();
+		
+		System.out.println(String.format("Tokens --------------> Cantidad: %s, %s", tokens.size(), tokens));
+		System.out.println(String.format("Tabla de símbolos ---> Cantidad: %s, %s", tablaSimbolos.size(), tablaSimbolos));
+		System.out.println(String.format("Errorres ------------> Cantidad: %s, %s", errores.size(), errores));
 	}
 
 }

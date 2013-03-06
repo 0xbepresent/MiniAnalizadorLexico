@@ -3,11 +3,12 @@ package co.edu.uniquindio;
 public class Token {
 	
 	private final Tipo tipo;
-	private final String valor;
+	private final String lexema;
+	private String valor;
 
-	public Token(Tipo tipo, String valor) {
+	public Token(Tipo tipo, String lexema) {
 		this.tipo = tipo;
-		this.valor = valor;
+		this.lexema = lexema;
 	}
 	
 	public Tipo getTipo() {
@@ -18,9 +19,17 @@ public class Token {
 		return valor;
 	}
 	
+	public String getLexema() {
+		return lexema;
+	}
+	
+	public void setValor(String valor) {
+		this.valor = valor;
+	}
+	
 	@Override
 	public String toString() {
-		return String.format("{Tipo: %s, Valor: %s}", tipo, valor);
+		return String.format("{Tipo: %s, Lexema: %s, Valor: %s}", tipo, lexema, valor);
 	}
 
 }
