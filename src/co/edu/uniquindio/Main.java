@@ -14,7 +14,7 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		
-		final String CODIGO_ANALIZAR[] = new LectorFuente().leer(); 
+		final String CODIGO_ANALIZAR[] = new LectorFuente().leer(null); 
 
 		System.out.println(Arrays.toString(CODIGO_ANALIZAR));
 		System.out.println();
@@ -24,10 +24,20 @@ public class Main {
 
 		TablaSimbolos tablaSimbolos = analizadorLexico.getTablaSimbolos();
 		List<Error> errores = analizadorLexico.getErrores();
+
+		System.out.println("Tokens");
+		for (Token token : tokens) {
+			System.out.println(token);
+		}
 		
-		System.out.println(String.format("Tokens --------------> Cantidad: %s, %s", tokens.size(), tokens));
+		System.out.println();
 		System.out.println(String.format("Tabla de símbolos ---> Cantidad: %s, %s", tablaSimbolos.size(), tablaSimbolos));
-		System.out.println(String.format("Errorres ------------> Cantidad: %s, %s", errores.size(), errores));
+		
+		System.out.println();
+		System.out.println("Errores");
+		for (Error error : errores) {
+			System.out.println(error);
+		}
 	}
 
 }

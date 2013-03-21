@@ -8,14 +8,15 @@ import java.util.List;
 
 public class LectorFuente {
 	
-	private static final String RUTA_FUENTE = "recursos/CodigoFuente.mal";
+	private static final String RUTA_FUENTE_DEFECTO = "recursos/CodigoFuente.mal";
 
-	public String[] leer() {
+	public String[] leer(String archivo) {
+		archivo = archivo != null ? "recursos/" + archivo : RUTA_FUENTE_DEFECTO;
 		List<String> lineasList = new ArrayList<String>(); 
 		
 		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new FileReader(RUTA_FUENTE));
+			br = new BufferedReader(new FileReader(RUTA_FUENTE_DEFECTO));
 	        String linea = null;
 
 	        while ((linea = br.readLine()) != null) {

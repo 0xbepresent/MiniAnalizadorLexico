@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import co.edu.uniquindio.categoriaslexicas.CategoriaLexica;
+
 /**
  * Se pretende analizar una cadena para recuperar los siguientes tokens:
  * 
@@ -21,7 +23,8 @@ public class AnalizadorLexico {
 	//------ Atributos para todo el análisis.
 	private final String[] codigoAnalizar;
 	private int lineaActual;
-	private List<Token> tokens = new ArrayList<>();
+	private List<Token> tokens = new ArrayList<Token>();
+	private List<CategoriaLexica> categorias = new ArrayList<CategoriaLexica>();
 	
 	//------ Tabla de símbolos y lista de errores.
 	private TablaSimbolos tablaSimbolos = new TablaSimbolos();
@@ -41,6 +44,24 @@ public class AnalizadorLexico {
 	
 	public AnalizadorLexico(String[] codigoAnalizar) {
 		this.codigoAnalizar = codigoAnalizar;
+		
+		TipoToken[] tiposToken = TipoToken.values();
+		
+		for (int i = 0; i < tiposToken.length; i++) {
+			if(tiposToken[i].isTienePredicado()) {
+				CategoriaLexica cl = null;
+				try {
+					cl = (CategoriaLexica)
+						Class.forName("co.edu.uniquindio.categoriaslexicas." +
+						tiposToken[i].toString()).newInstance();
+					cl.setAnalizador(this);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				categorias.add(cl);
+			}
+		}
 	}
 	
 	public List<Token> getTokens() {
@@ -63,12 +84,15 @@ public class AnalizadorLexico {
 					}
 				}
 				
-				Token tokenActual = aceptarEntero();
-				if(tokenActual == null) {
-					tokenActual = aceptarDecimal();
-				}
-				if(tokenActual == null) {
-					tokenActual = aceptarSeparador();
+
+				// Se trata de encontrar el token en alguna de las categorías.
+				// Si no lo encuentra tokenActual sigue valiendo null.
+				Token tokenActual = null;
+				for (CategoriaLexica cl : categorias) {
+					tokenActual = cl.aceptar();
+					if(tokenActual != null) {
+						break;
+					}
 				}
 				
 				// Si no se encontró ninguna categoría léxica se reporta el error.
@@ -92,9 +116,11 @@ public class AnalizadorLexico {
 	}
 
 	private void instalarTokenTablaSimbolos(Token token) {
-		
-		if(		token.getTipo() == Tipo.DECIMAL
-			|| 	token.getTipo() == Tipo.ENTERO) {
+		// TODO verificar que otros tokens se deben instalar.
+		if(		token.getTipo() == TipoToken.Double
+			|| 	token.getTipo() == TipoToken.Int
+			|| 	token.getTipo() == TipoToken.Identificador
+			|| 	token.getTipo() == TipoToken.Cadena) {
 			String valor = tablaSimbolos.agregarSimbolo(token.getTipo(),
 				new Simbolo(token.getLexema()));
 			token.setValor(valor);
@@ -106,6 +132,8 @@ public class AnalizadorLexico {
 		indiceCaracterActual = 0;
 		regresoBacktracking = 0;
 		lineaActual++;
+		// El primer avance no se cuenta como fin de linea.
+		if(lineaActual != 1) tokens.add(new Token(TipoToken.EOL, "\\n", TipoToken.EOL.toString()));
 		cadenaAnalizar = codigoAnalizar[lineaActual - 1];
 	}
 
@@ -135,131 +163,23 @@ public class AnalizadorLexico {
 		}
 	}
 	
-	private boolean isCaracterBlanco(char caracterActual) {
+	public boolean isCaracterBlanco(char caracterActual) {
 		return Arrays.binarySearch(CARACTERES_BLANCO, caracterActual) >= 0;
 	}
 
-	private Token aceptarEntero() {
-
-		// Como puede haber backtracking se almanenca en donde se debe regresar.
-		establecerRegresoBacktracking();
-		
-		// Lexema recuperado.
-		String lexema = "";
-		
-		if(!Character.isDigit(getCaracterActual())) {
-			return null;
-		}
-		else {
-			// Estado 1.
-			lexema += getCaracterActual();
-			
-			do {
-				// Se consume los digitos.
-				irSiguienteCaracter();
-				
-				// Se puede haber llegado al caracter que rompe el ciclo.
-				if(Character.isDigit(getCaracterActual())) {
-					lexema += getCaracterActual();
-				}
-			}while(Character.isDigit(getCaracterActual()));
-			
-			if(getCaracterActual() == '.') {
-				// Se hace el backtracking.
-				regresarBacktracking();
-				return null;
-			}
-			else {
-				// Se acepta el token y se retorna.
-				return new Token(Tipo.ENTERO, lexema);
-			}
-		}
-	}
-	
-	private Token aceptarDecimal() {
-		
-		// Lexema recuperado.
-		String lexema = "";
-		
-		if(!Character.isDigit(getCaracterActual())) {
-			return null;
-		}
-		else {
-			// Estado 1.
-			lexema += getCaracterActual();
-			
-			do {
-				// Se consume los digitos.
-				irSiguienteCaracter();
-
-				// Se puede haber llegado al caracter que rompe el ciclo.
-				if(Character.isDigit(getCaracterActual())) {
-					lexema += getCaracterActual();
-				}
-			}while(Character.isDigit(getCaracterActual()));
-			
-			if(getCaracterActual() != '.') {
-				// Se rechaza.
-				return null;
-			}
-			else {
-				lexema += getCaracterActual();
-				irSiguienteCaracter();
-				// Estado 2.
-				if(!Character.isDigit(getCaracterActual())) {
-					// Se rechaza.
-					return null;
-				}
-				else {
-					// Estado 3.
-					lexema += getCaracterActual();
-					
-					do {
-						// Se consume los digitos.
-						irSiguienteCaracter();
-						getCaracterActual();
-						
-						// Se puede haber llegado al caracter que rompe el ciclo.
-						if(Character.isDigit(getCaracterActual())) {
-							lexema += getCaracterActual();
-						}
-					}while(Character.isDigit(getCaracterActual()));
-					
-					// Se acepta el token y se retorna.
-					return new Token(Tipo.DECIMAL, lexema);
-				}
-			}
-		}
-		
-	}
-
-	private Token aceptarSeparador() {
-		if(getCaracterActual() != ',') {
-			// Se rechaza.
-			return null;
-		}
-		else {
-			// Se acepta el token y se retorna.
-			irSiguienteCaracter();
-			Token token = new Token(Tipo.SEPARADOR, ",");
-			token.setValor("separador");
-			return token;
-		}
-	}
-	
-	private void irSiguienteCaracter() {
+	public void irSiguienteCaracter() {
 		indiceCaracterActual++;
 	}
 	
-	private void establecerRegresoBacktracking() {
+	public void establecerRegresoBacktracking() {
 		regresoBacktracking = indiceCaracterActual;
 	}
 	
-	private void regresarBacktracking() {
+	public void regresarBacktracking() {
 		indiceCaracterActual = regresoBacktracking;
 	}
 	
-	private char getCaracterActual() {
+	public char getCaracterActual() {
 		return indiceCaracterActual >= cadenaAnalizar.length() ?
 				EOF :
 				cadenaAnalizar.charAt(indiceCaracterActual);

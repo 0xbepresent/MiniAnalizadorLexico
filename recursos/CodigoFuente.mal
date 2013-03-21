@@ -1,7 +1,16 @@
-1 2 3 12.34 1 2 3 43.21 , 1,2,3
-1 2 3 12.34 1 2 3 43.21 , 1,2,3
+int a = 5
+double b = 7
 
-error 2.2   222. 45
+string c = "Algo"
 
-1 2 3 12.34 1 2 3 43.21 , 1,2,3
-1 2 3 12.34 1 2 3 43.21 , 1,2,3
+string some(){
+  c = c + " mas otra cosa"
+  if(c.length() > 3) {
+    puts("De longitud mayor a tres")
+  }
+
+  c
+}
+
+string d = some()
+puts(d)

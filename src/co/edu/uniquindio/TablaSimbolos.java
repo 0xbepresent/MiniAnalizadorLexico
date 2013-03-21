@@ -12,8 +12,8 @@ public class TablaSimbolos {
 		tablaSimbolos.put("separador", new Simbolo(","));
 	}
 	
-	public String agregarSimbolo(Tipo tipo, Simbolo simbolo) {
-		String valor = tipo.toString() + simbolo.hashCode();
+	public String agregarSimbolo(TipoToken tipoToken, Simbolo simbolo) {
+		String valor = tipoToken.toString() + simbolo.hashCode();
 		tablaSimbolos.put(valor, simbolo);
 		return valor;
 	}
