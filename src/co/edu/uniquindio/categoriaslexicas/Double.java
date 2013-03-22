@@ -1,6 +1,5 @@
 package co.edu.uniquindio.categoriaslexicas;
 
-import co.edu.uniquindio.TipoToken;
 import co.edu.uniquindio.Token;
 
 public class Double extends CategoriaLexicaBase {
@@ -55,7 +54,7 @@ public class Double extends CategoriaLexicaBase {
 					}while(Character.isDigit(analizadorLexico.getCaracterActual()));
 					
 					// Se acepta el token y se retorna.
-					return new Token(TipoToken.Double, lexema);
+					return new Token(getClass().getSimpleName(), lexema);
 				}
 			}
 		}

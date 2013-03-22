@@ -1,12 +1,10 @@
 package co.edu.uniquindio.categoriaslexicas;
 
-import co.edu.uniquindio.TipoToken;
 import co.edu.uniquindio.Token;
 
 public class CategoriaLexicaUnCaracter extends CategoriaLexicaBase {
 	
 	protected char caracter;
-	protected TipoToken tipoToken;
 	
 	@Override
 	public Token aceptar() {
@@ -17,8 +15,7 @@ public class CategoriaLexicaUnCaracter extends CategoriaLexicaBase {
 		else {
 			// Se acepta el token y se retorna.
 			analizadorLexico.irSiguienteCaracter();
-			Token token = new Token(tipoToken, "" + caracter);
-			token.setValor(tipoToken.toString());
+			Token token = new Token(getClass().getSimpleName(), "" + caracter, getClass().getSimpleName());
 			return token;
 		}
 	}

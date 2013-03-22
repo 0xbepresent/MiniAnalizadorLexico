@@ -1,12 +1,10 @@
 package co.edu.uniquindio.categoriaslexicas;
 
-import co.edu.uniquindio.TipoToken;
 import co.edu.uniquindio.Token;
 
 public class CategoriaLexicaPalabras extends CategoriaLexicaBase {
 
 	protected String[] palabras;
-	protected TipoToken tipoToken;
 
 	@Override
 	public Token aceptar() {
@@ -29,7 +27,7 @@ public class CategoriaLexicaPalabras extends CategoriaLexicaBase {
 			}
 			
 			if(completoPalabra) {
-				return new Token(tipoToken, lexema, tipoToken.toString());
+				return new Token(getClass().getSimpleName(), lexema, getClass().getSimpleName());
 			}
 			else {
 				analizadorLexico.regresarBacktracking();

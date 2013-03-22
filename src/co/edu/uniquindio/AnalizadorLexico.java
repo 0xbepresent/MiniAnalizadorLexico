@@ -4,7 +4,26 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import co.edu.uniquindio.categoriaslexicas.AgrupadorCodigoApertura;
+import co.edu.uniquindio.categoriaslexicas.AgrupadorCodigoCierre;
+import co.edu.uniquindio.categoriaslexicas.AgrupadorParametrosApertura;
+import co.edu.uniquindio.categoriaslexicas.AgrupadorParametrosCierre;
+import co.edu.uniquindio.categoriaslexicas.Booleano;
+import co.edu.uniquindio.categoriaslexicas.Cadena;
 import co.edu.uniquindio.categoriaslexicas.CategoriaLexica;
+import co.edu.uniquindio.categoriaslexicas.Else;
+import co.edu.uniquindio.categoriaslexicas.For;
+import co.edu.uniquindio.categoriaslexicas.Identificador;
+import co.edu.uniquindio.categoriaslexicas.If;
+import co.edu.uniquindio.categoriaslexicas.Int;
+import co.edu.uniquindio.categoriaslexicas.InvocadorMetodo;
+import co.edu.uniquindio.categoriaslexicas.OperadorAritmetico;
+import co.edu.uniquindio.categoriaslexicas.OperadorAsignacion;
+import co.edu.uniquindio.categoriaslexicas.OperadorBooleano;
+import co.edu.uniquindio.categoriaslexicas.OperadorRelacional;
+import co.edu.uniquindio.categoriaslexicas.Separador;
+import co.edu.uniquindio.categoriaslexicas.SeparadorFor;
+import co.edu.uniquindio.categoriaslexicas.TipoDato;
 
 /**
  * Se pretende analizar una cadena para recuperar los siguientes tokens:
@@ -45,22 +64,41 @@ public class AnalizadorLexico {
 	public AnalizadorLexico(String[] codigoAnalizar) {
 		this.codigoAnalizar = codigoAnalizar;
 		
-		TipoToken[] tiposToken = TipoToken.values();
+		// Orden en el que se hace el análisis
+		Class<?>[] categoriasClases = {
+			Int.class,
+			co.edu.uniquindio.categoriaslexicas.Double.class,
+			Separador.class,
+			AgrupadorCodigoApertura.class,
+			AgrupadorCodigoCierre.class,
+			AgrupadorParametrosApertura.class,
+			AgrupadorParametrosCierre.class,
+			OperadorAsignacion.class,
+			SeparadorFor.class,
+			Booleano.class,
+			TipoDato.class,
+			OperadorRelacional.class,
+			OperadorAritmetico.class,
+			OperadorBooleano.class,
+			If.class,
+			Else.class,
+			For.class,
+			Identificador.class,
+			Cadena.class,
+			InvocadorMetodo.class,
+		};
 		
-		for (int i = 0; i < tiposToken.length; i++) {
-			if(tiposToken[i].isTienePredicado()) {
-				CategoriaLexica cl = null;
-				try {
-					cl = (CategoriaLexica)
-						Class.forName("co.edu.uniquindio.categoriaslexicas." +
-						tiposToken[i].toString()).newInstance();
-					cl.setAnalizador(this);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				
-				categorias.add(cl);
+		for (int i = 0; i < categoriasClases.length; i++) {
+			CategoriaLexica cl = null;
+			try {
+				cl = (CategoriaLexica)
+					categoriasClases[i].newInstance();
+				cl.setAnalizador(this);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+			
+			categorias.add(cl);
 		}
 	}
 	
@@ -117,11 +155,11 @@ public class AnalizadorLexico {
 
 	private void instalarTokenTablaSimbolos(Token token) {
 		// TODO verificar que otros tokens se deben instalar.
-		if(		token.getTipo() == TipoToken.Double
-			|| 	token.getTipo() == TipoToken.Int
-			|| 	token.getTipo() == TipoToken.Identificador
-			|| 	token.getTipo() == TipoToken.Cadena) {
-			String valor = tablaSimbolos.agregarSimbolo(token.getTipo(),
+		if(		token.getTipoToken() == Double.class.getSimpleName()
+			|| 	token.getTipoToken() == Int.class.getSimpleName()
+			|| 	token.getTipoToken() == Identificador.class.getSimpleName()
+			|| 	token.getTipoToken() == Cadena.class.getSimpleName()) {
+			String valor = tablaSimbolos.agregarSimbolo(token.getTipoToken(),
 				new Simbolo(token.getLexema()));
 			token.setValor(valor);
 		}
@@ -133,7 +171,7 @@ public class AnalizadorLexico {
 		regresoBacktracking = 0;
 		lineaActual++;
 		// El primer avance no se cuenta como fin de linea.
-		if(lineaActual != 1) tokens.add(new Token(TipoToken.EOL, "\\n", TipoToken.EOL.toString()));
+		if(lineaActual != 1) tokens.add(new Token("EOL", "\\n", "EOL"));
 		cadenaAnalizar = codigoAnalizar[lineaActual - 1];
 	}
 

@@ -2,22 +2,22 @@ package co.edu.uniquindio;
 
 public class Token {
 	
-	private final TipoToken tipoToken;
+	private final String tipoToken;
 	private final String lexema;
 	private String valor;
 
-	public Token(TipoToken tipoToken, String lexema) {
+	public Token(String tipoToken, String lexema) {
 		this.tipoToken = tipoToken;
 		this.lexema = lexema;
 	}
 	
-	public Token(TipoToken tipoToken, String lexema, String valor) {
+	public Token(String tipoToken, String lexema, String valor) {
 		this.tipoToken = tipoToken;
 		this.lexema = lexema;
 		this.valor = valor;
 	}
 	
-	public TipoToken getTipo() {
+	public String getTipoToken() {
 		return tipoToken;
 	}
 	

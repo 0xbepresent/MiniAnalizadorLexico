@@ -1,6 +1,5 @@
 package co.edu.uniquindio.categoriaslexicas;
 
-import co.edu.uniquindio.TipoToken;
 import co.edu.uniquindio.Token;
 
 public class Cadena extends CategoriaLexicaBase {
@@ -35,7 +34,7 @@ public class Cadena extends CategoriaLexicaBase {
 				lexema += analizadorLexico.getCaracterActual();
 				analizadorLexico.irSiguienteCaracter();
 				// Se acepta el token y se retorna.
-				return new Token(TipoToken.Cadena, lexema);
+				return new Token(getClass().getSimpleName(), lexema);
 			}
 			else {
 				return null;

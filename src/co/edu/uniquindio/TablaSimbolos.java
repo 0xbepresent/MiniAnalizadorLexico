@@ -12,7 +12,7 @@ public class TablaSimbolos {
 		tablaSimbolos.put("separador", new Simbolo(","));
 	}
 	
-	public String agregarSimbolo(TipoToken tipoToken, Simbolo simbolo) {
+	public String agregarSimbolo(String tipoToken, Simbolo simbolo) {
 		String valor = tipoToken.toString() + simbolo.hashCode();
 		tablaSimbolos.put(valor, simbolo);
 		return valor;

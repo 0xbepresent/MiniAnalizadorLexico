@@ -1,6 +1,5 @@
 package co.edu.uniquindio.categoriaslexicas;
 
-import co.edu.uniquindio.TipoToken;
 import co.edu.uniquindio.Token;
 
 public class Int extends CategoriaLexicaBase {
@@ -38,7 +37,7 @@ public class Int extends CategoriaLexicaBase {
 			}
 			else {
 				// Se acepta el token y se retorna.
-				return new Token(TipoToken.Int, lexema);
+				return new Token(getClass().getSimpleName(), lexema);
 			}
 		}
 	}
