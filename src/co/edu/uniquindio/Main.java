@@ -5,13 +5,6 @@ import java.util.List;
 
 public class Main {
 	
-	/**
-	 * Se pretende analizar una cadena para recuperar los siguientes tokens:
-	 * 
-	 * + Literal de entero:        d+
-	 * + Literal de decimal:       d+.d+
-	 * + Separador de parámetros:  ,
-	 */
 	public static void main(String[] args) {
 		
 		final String CODIGO_ANALIZAR[] = new LectorFuente().leer(null); 

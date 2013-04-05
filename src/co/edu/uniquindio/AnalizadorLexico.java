@@ -28,11 +28,7 @@ import co.edu.uniquindio.categoriaslexicas.SeparadorFor;
 import co.edu.uniquindio.categoriaslexicas.TipoDato;
 
 /**
- * Se pretende analizar una cadena para recuperar los siguientes tokens:
- * 
- * + Literal de entero:        d+
- * + Literal de decimal:       d+.d+
- * + Separador de parámetros:  ,
+ * Analizador Lexico
  */
 public class AnalizadorLexico {
 	
