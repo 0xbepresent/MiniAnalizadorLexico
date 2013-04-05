@@ -15,7 +15,7 @@ public class CategoriaLexicaUnCaracter extends CategoriaLexicaBase {
 		else {
 			// Se acepta el token y se retorna.
 			analizadorLexico.irSiguienteCaracter();
-			Token token = new Token(getClass().getSimpleName(), "" + caracter, getClass().getSimpleName());
+			Token token = new Token(getClass(), "" + caracter, getClass().getSimpleName());
 			return token;
 		}
 	}

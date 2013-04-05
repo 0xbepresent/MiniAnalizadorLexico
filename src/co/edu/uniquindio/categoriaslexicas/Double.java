@@ -54,7 +54,7 @@ public class Double extends CategoriaLexicaBase {
 					}while(Character.isDigit(analizadorLexico.getCaracterActual()));
 					
 					// Se acepta el token y se retorna.
-					return new Token(getClass().getSimpleName(), lexema);
+					return new Token(getClass(), lexema);
 				}
 			}
 		}

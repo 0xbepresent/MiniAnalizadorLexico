@@ -37,7 +37,7 @@ public class Int extends CategoriaLexicaBase {
 			}
 			else {
 				// Se acepta el token y se retorna.
-				return new Token(getClass().getSimpleName(), lexema);
+				return new Token(getClass(), lexema);
 			}
 		}
 	}

@@ -38,6 +38,11 @@ public class Main {
 		for (Error error : errores) {
 			System.out.println(error);
 		}
+		
+		AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico(tokens);
+		Nodo raiz = analizadorSintactico.analizar();
+		
+		System.out.println(raiz);
 	}
 
 }

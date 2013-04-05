@@ -1,7 +1,11 @@
 package co.edu.uniquindio.categoriassintacticas;
 
-public interface CategoriaSintactica {
 
+import co.edu.uniquindio.AnalizadorSintactico;
+import co.edu.uniquindio.Derivacion;
+
+public interface CategoriaSintactica {
 	
+	public Derivacion construir(AnalizadorSintactico contexto);
 	
 }

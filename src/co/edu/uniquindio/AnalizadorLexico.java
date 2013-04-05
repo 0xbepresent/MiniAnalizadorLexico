@@ -12,6 +12,7 @@ import co.edu.uniquindio.categoriaslexicas.Booleano;
 import co.edu.uniquindio.categoriaslexicas.Cadena;
 import co.edu.uniquindio.categoriaslexicas.CategoriaLexica;
 import co.edu.uniquindio.categoriaslexicas.Else;
+import co.edu.uniquindio.categoriaslexicas.Eol;
 import co.edu.uniquindio.categoriaslexicas.For;
 import co.edu.uniquindio.categoriaslexicas.Identificador;
 import co.edu.uniquindio.categoriaslexicas.If;
@@ -20,6 +21,7 @@ import co.edu.uniquindio.categoriaslexicas.InvocadorMetodo;
 import co.edu.uniquindio.categoriaslexicas.OperadorAritmetico;
 import co.edu.uniquindio.categoriaslexicas.OperadorAsignacion;
 import co.edu.uniquindio.categoriaslexicas.OperadorBooleano;
+import co.edu.uniquindio.categoriaslexicas.OperadorConcatenacion;
 import co.edu.uniquindio.categoriaslexicas.OperadorRelacional;
 import co.edu.uniquindio.categoriaslexicas.Separador;
 import co.edu.uniquindio.categoriaslexicas.SeparadorFor;
@@ -80,6 +82,7 @@ public class AnalizadorLexico {
 			OperadorRelacional.class,
 			OperadorAritmetico.class,
 			OperadorBooleano.class,
+			OperadorConcatenacion.class,
 			If.class,
 			Else.class,
 			For.class,
@@ -154,11 +157,10 @@ public class AnalizadorLexico {
 	}
 
 	private void instalarTokenTablaSimbolos(Token token) {
-		// TODO verificar que otros tokens se deben instalar.
-		if(		token.getTipoToken() == Double.class.getSimpleName()
-			|| 	token.getTipoToken() == Int.class.getSimpleName()
-			|| 	token.getTipoToken() == Identificador.class.getSimpleName()
-			|| 	token.getTipoToken() == Cadena.class.getSimpleName()) {
+		if(		token.getTipoToken().equals(Double.class)
+			|| 	token.getTipoToken().equals(Int.class)
+			|| 	token.getTipoToken().equals(Identificador.class)
+			|| 	token.getTipoToken().equals(Cadena.class)) {
 			String valor = tablaSimbolos.agregarSimbolo(token.getTipoToken(),
 				new Simbolo(token.getLexema()));
 			token.setValor(valor);
@@ -171,7 +173,7 @@ public class AnalizadorLexico {
 		regresoBacktracking = 0;
 		lineaActual++;
 		// El primer avance no se cuenta como fin de linea.
-		if(lineaActual != 1) tokens.add(new Token("EOL", "\\n", "EOL"));
+		if(lineaActual != 1) tokens.add(new Token(Eol.class, "\\n", "EOL"));
 		cadenaAnalizar = codigoAnalizar[lineaActual - 1];
 	}
 

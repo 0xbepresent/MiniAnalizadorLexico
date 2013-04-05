@@ -34,7 +34,7 @@ public class Cadena extends CategoriaLexicaBase {
 				lexema += analizadorLexico.getCaracterActual();
 				analizadorLexico.irSiguienteCaracter();
 				// Se acepta el token y se retorna.
-				return new Token(getClass().getSimpleName(), lexema);
+				return new Token(getClass(), lexema);
 			}
 			else {
 				return null;

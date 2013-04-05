@@ -24,7 +24,6 @@ public class LectorFuente {
 	        }
 	    }
 		catch(Exception e) {
-			// TODO
 			e.printStackTrace();
 			System.err.println("No se pudo leer el archivo de código fuente: " + e.getMessage());
 		}

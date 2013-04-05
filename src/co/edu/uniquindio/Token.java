@@ -1,23 +1,25 @@
 package co.edu.uniquindio;
 
-public class Token {
+import co.edu.uniquindio.categoriaslexicas.CategoriaLexica;
+
+public class Token extends NodoImplemetado {
 	
-	private final String tipoToken;
+	private final Class<? extends CategoriaLexica> tipoToken;
 	private final String lexema;
 	private String valor;
 
-	public Token(String tipoToken, String lexema) {
+	public Token(Class<? extends CategoriaLexica> tipoToken, String lexema) {
 		this.tipoToken = tipoToken;
 		this.lexema = lexema;
 	}
 	
-	public Token(String tipoToken, String lexema, String valor) {
+	public Token(Class<? extends CategoriaLexica> tipoToken, String lexema, String valor) {
 		this.tipoToken = tipoToken;
 		this.lexema = lexema;
 		this.valor = valor;
 	}
 	
-	public String getTipoToken() {
+	public Class<? extends CategoriaLexica> getTipoToken() {
 		return tipoToken;
 	}
 	
@@ -35,7 +37,7 @@ public class Token {
 	
 	@Override
 	public String toString() {
-		return String.format("{TipoToken: %s, Lexema: %s, Valor: %s}", tipoToken, lexema, valor);
+		return String.format("[TipoToken: %s, Lexema: %s, Valor: %s]", tipoToken.getSimpleName(), lexema, valor);
 	}
 
 }

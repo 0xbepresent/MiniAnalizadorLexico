@@ -27,7 +27,7 @@ public class CategoriaLexicaPalabras extends CategoriaLexicaBase {
 			}
 			
 			if(completoPalabra) {
-				return new Token(getClass().getSimpleName(), lexema, getClass().getSimpleName());
+				return new Token(getClass(), lexema, getClass().getSimpleName());
 			}
 			else {
 				analizadorLexico.regresarBacktracking();
