@@ -39,6 +39,7 @@ public class Main {
 			System.out.println(error);
 		}
 		
+		System.out.println();
 		AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico(tokens);
 		Nodo raiz = analizadorSintactico.analizar();
 		
