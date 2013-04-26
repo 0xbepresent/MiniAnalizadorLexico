@@ -18,7 +18,7 @@ public abstract class CategoriaSintacticaBase implements CategoriaSintactica {
 			for (Class<?>[] produccion : producciones) {
 				
 				// Se establece el punto de backtracking
-				contexto.establecerRegresoBacktracking();
+				int posicionBacktracking = contexto.getIndiceTokenActual();
 				
 				// Se analiza una produccion
 				List<Nodo> nodos = new ArrayList<Nodo>();
@@ -59,7 +59,7 @@ public abstract class CategoriaSintacticaBase implements CategoriaSintactica {
 				// Sino, se regresa al punto de backtracking y se analiza
 				// la siguiente producción.
 				else {
-					contexto.regresarBacktracking();
+					contexto.setIndiceTokenActual(posicionBacktracking);
 				}
 			}
 		} catch (Exception e) {

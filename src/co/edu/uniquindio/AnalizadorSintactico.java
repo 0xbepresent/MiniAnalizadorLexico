@@ -13,8 +13,6 @@ public class AnalizadorSintactico {
 	
 	private int indiceTokenActual = 0;
 
-	private int regresoBacktracking;
-
 	private List<Error> errores;
 
 	public AnalizadorSintactico(List<Token> tokens) {
@@ -40,14 +38,6 @@ public class AnalizadorSintactico {
 		indiceTokenActual++;
 	}
 	
-	public void establecerRegresoBacktracking() {
-		regresoBacktracking = indiceTokenActual;
-	}
-	
-	public void regresarBacktracking() {
-		indiceTokenActual = regresoBacktracking;
-	}
-	
 	public Token getTokenActual() {
 		return indiceTokenActual >= tokens.size() ?
 				null :
@@ -56,6 +46,14 @@ public class AnalizadorSintactico {
 
 	public List<Error> getErrores() {
 		return errores;
+	}
+
+	public int getIndiceTokenActual() {
+		return indiceTokenActual;
+	}
+
+	public void setIndiceTokenActual(int indiceTokenActual) {
+		this.indiceTokenActual = indiceTokenActual;
 	}
 	
 }
