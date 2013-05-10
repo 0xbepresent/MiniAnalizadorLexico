@@ -3,6 +3,10 @@ package co.edu.uniquindio;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTree;
+
 public class Main {
 	
 	public static void main(String[] args) {
@@ -18,7 +22,7 @@ public class Main {
 		TablaSimbolos tablaSimbolos = analizadorLexico.getTablaSimbolos();
 		List<Error> errores = analizadorLexico.getErrores();
 
-		System.out.println("Tokens");
+		System.out.println("Tokens: " + tokens.size());
 		for (Token token : tokens) {
 			System.out.println(token);
 		}
@@ -37,6 +41,23 @@ public class Main {
 		Nodo raiz = analizadorSintactico.analizar();
 		
 		System.out.println(raiz);
+		
+		mostrarRepresentacionVisual(analizadorSintactico.getRepresentacionVisual());
+	}
+
+	private static void mostrarRepresentacionVisual(JTree representacionVisual) {
+		JFrame jFrame = new JFrame();
+		jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		jFrame.setLocationRelativeTo(null);
+		jFrame.setVisible(true);
+		JPanel jPanel = (JPanel) jFrame.getContentPane();
+		
+		for (int i = 0; i < representacionVisual.getRowCount(); i++) {
+	         representacionVisual.expandRow(i);
+		}
+		
+		jPanel.add(representacionVisual);
+		jFrame.pack();
 	}
 
 }

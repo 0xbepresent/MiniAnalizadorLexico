@@ -6,8 +6,8 @@ public class ExpresionCadena extends CategoriaSintacticaBase {
 
 	public ExpresionCadena() {
 		producciones = new Class<?>[][]{
-			{ TerminoC.class, OperadorConcatenacion.class, TerminoC.class },
-			{ TerminoC.class }
+			{ TerminoCadena.class, OperadorConcatenacion.class, ExpresionCadena.class },
+			{ TerminoCadena.class }
 		};
 	}
 

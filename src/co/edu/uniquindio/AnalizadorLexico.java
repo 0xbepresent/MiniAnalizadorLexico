@@ -13,6 +13,7 @@ import co.edu.uniquindio.categoriaslexicas.Cadena;
 import co.edu.uniquindio.categoriaslexicas.CategoriaLexica;
 import co.edu.uniquindio.categoriaslexicas.Else;
 import co.edu.uniquindio.categoriaslexicas.Eol;
+import co.edu.uniquindio.categoriaslexicas.Flotante;
 import co.edu.uniquindio.categoriaslexicas.For;
 import co.edu.uniquindio.categoriaslexicas.Identificador;
 import co.edu.uniquindio.categoriaslexicas.If;
@@ -65,7 +66,7 @@ public class AnalizadorLexico {
 		// Orden en el que se hace el análisis
 		Class<?>[] categoriasClases = {
 			Int.class,
-			co.edu.uniquindio.categoriaslexicas.Double.class,
+			co.edu.uniquindio.categoriaslexicas.Flotante.class,
 			Separador.class,
 			AgrupadorCodigoApertura.class,
 			AgrupadorCodigoCierre.class,
@@ -153,11 +154,12 @@ public class AnalizadorLexico {
 	}
 
 	private void instalarTokenTablaSimbolos(Token token) {
-		if(		token.getTipoToken().equals(Double.class)
-			|| 	token.getTipoToken().equals(Int.class)
-			|| 	token.getTipoToken().equals(Identificador.class)
-			|| 	token.getTipoToken().equals(Cadena.class)) {
-			String valor = tablaSimbolos.agregarSimbolo(token.getTipoToken(),
+		Class<? extends CategoriaLexica> tipoToken = token.getTipoToken();
+		if(		tipoToken.equals(Flotante.class)
+			|| 	tipoToken.equals(Int.class)
+			|| 	tipoToken.equals(Identificador.class)
+			|| 	tipoToken.equals(Cadena.class)) {
+			String valor = tablaSimbolos.agregarSimbolo(tipoToken,
 				new Simbolo(token.getLexema()));
 			token.setValor(valor);
 		}

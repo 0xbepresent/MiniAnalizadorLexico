@@ -1,1 +1,16 @@
-c @ " mas otra cosa" @ "dimelo" @ otro
+int a = 5
+double b = 7
+
+string c = "Algo"
+
+string some(int e,){
+  c = c @ " mas otra cosa"
+  if(c.length() > 3) {
+    puts("De longitud mayor a tres")
+  }
+
+  c
+}
+
+string d = some(123)
+puts(d)

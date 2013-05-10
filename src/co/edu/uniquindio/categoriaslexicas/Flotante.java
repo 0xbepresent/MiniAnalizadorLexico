@@ -2,7 +2,7 @@ package co.edu.uniquindio.categoriaslexicas;
 
 import co.edu.uniquindio.Token;
 
-public class Double extends CategoriaLexicaBase {
+public class Flotante extends CategoriaLexicaBase {
 
 	@Override
 	public Token aceptar() {

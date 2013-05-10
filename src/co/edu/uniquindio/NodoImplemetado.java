@@ -40,25 +40,28 @@ public class NodoImplemetado implements Nodo {
 			Class<? extends CategoriaSintactica> categoriaSintactica = derivacion.getCategoriaSintactica();
 			
 			String toStringHijos = "";
+			String totalTokens   = "";
 			for (Nodo nodo : derivacion.getHijos()) {
+				
+				totalTokens = "" + derivacion.getTotalTokens();
 				
 				String nodoToString = nodo.toString();
 				StringTokenizer tokenizer = new StringTokenizer(nodoToString, "\n");
 				if(tokenizer.countTokens() > 1) {
 					while (tokenizer.hasMoreElements()) {
 						String linea = tokenizer.nextToken();
-						toStringHijos += String.format("\t%s\n", linea);
+						toStringHijos += String.format("  %s\n", linea);
 					}
 				}
 				else {
-					toStringHijos += String.format("\t%s\n", nodoToString); 
+					toStringHijos += String.format("  %s\n", nodoToString); 
 				}
 			}
 			
 			return String.format(
-				"CategoriaSintactica: %s {\n" +
+				"%s %s: {\n" +
 					"%s" +
-				"}", categoriaSintactica.getSimpleName(), toStringHijos);
+				"}", categoriaSintactica.getSimpleName(), totalTokens, toStringHijos);
 		}
 		
 		return super.toString();

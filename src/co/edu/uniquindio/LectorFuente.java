@@ -1,9 +1,8 @@
 package co.edu.uniquindio;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class LectorFuente {
@@ -12,30 +11,15 @@ public class LectorFuente {
 
 	public String[] leer(String archivo) {
 		archivo = archivo != null ? "recursos/" + archivo : RUTA_FUENTE_DEFECTO;
-		List<String> lineasList = new ArrayList<String>(); 
+		List<String> lineasList = null;
 		
-		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new FileReader(RUTA_FUENTE_DEFECTO));
-	        String linea = null;
-
-	        while ((linea = br.readLine()) != null) {
-	        	lineasList.add(linea);
-	        }
+			lineasList = Files.readAllLines(Paths.get(archivo), Charset.defaultCharset());
 	    }
 		catch(Exception e) {
 			e.printStackTrace();
 			System.err.println("No se pudo leer el archivo de código fuente: " + e.getMessage());
 		}
-		finally {
-	        try {
-	        	if(br != null) {
-	        		br.close();
-	        	}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-	    }
 		
 		return lineasList.toArray(new String[lineasList.size()]);
 	}
