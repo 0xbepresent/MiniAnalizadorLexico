@@ -14,7 +14,7 @@ EOL // Salto de línea
 }  
 (  
 )  
-=  
+ =  
 ;  
 .  
 OperadorRelacional => :: | !: | > | :> | < | :<  
@@ -97,6 +97,9 @@ De expresión
 <ExpresionCadena>         ::= <TerminoCadena> @ <TerminoCadena> | <TerminoCadena>
 <TerminoCadena>           ::= Identificador | Cadena | <InvocacionMetodo>
 ```
+
+[ChangeLog.md](ChangeLog.md)
+------------
 
 Comentarios
 ------------
