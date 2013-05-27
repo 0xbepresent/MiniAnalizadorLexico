@@ -98,14 +98,14 @@ De expresión
 <TerminoCadena>           ::= Identificador | Cadena | <InvocacionMetodo>
 ```
 
-[ChangeLog.md](ChangeLog.md)
-------------
-
 Semántica
 ---------
 
 * No está soportada la sobrecarga de métodos.
 * Las variables se definen de alcance de método o de alcance global.
+
+[ChangeLog.md](ChangeLog.md)
+------------
 
 Comentarios
 ------------
@@ -144,7 +144,7 @@ string d = some()
 puts(d)
 ```
 
-TODO
+[TODO][issue1]
 ----
 
 - [x] Distinguir el operador de suma del de concatenación.
@@ -162,3 +162,4 @@ TODO
 [Cadena]: http://www.debuggex.com/?re=%22%5B+%5Cw%5D%2A%22&flags=&str=%22Ejemplo+de+cadena%22
 [Int]: http://www.debuggex.com/?re=%5Cd%2B&flags=&str=83498320
 [Flotante]: http://www.debuggex.com/?re=%5Cd%2B%5C.%5Cd%2B&flags=&str=12323.98
+[issue1]: https://github.com/sanrodari/MiniAnalizadorLexico/issues/1
