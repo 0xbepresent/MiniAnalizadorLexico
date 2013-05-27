@@ -1,9 +1,5 @@
 package co.edu.uniquindio.categoriassintacticas;
 
-import co.edu.uniquindio.AnalizadorSintactico;
-import co.edu.uniquindio.Derivacion;
-
-
 public class ListaSentencias extends CategoriaSintacticaBase {
 
 	public ListaSentencias() {
@@ -16,10 +12,4 @@ public class ListaSentencias extends CategoriaSintacticaBase {
 		};
 	}
 	
-	@Override
-	public Derivacion construir(AnalizadorSintactico contexto) {
-		// TODO Quitar Auto-generated method stub
-		return super.construir(contexto);
-	}
-
 }

@@ -2,7 +2,7 @@ package co.edu.uniquindio;
 
 public class Simbolo {
 	
-	private final String lexema;
+	protected final String lexema;
 	
 	public Simbolo(String lexema) {
 		this.lexema = lexema;

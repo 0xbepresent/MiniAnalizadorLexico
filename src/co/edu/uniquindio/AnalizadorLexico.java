@@ -54,6 +54,8 @@ public class AnalizadorLexico {
 	 */
 	private static final char EOF = Character.MAX_HIGH_SURROGATE;
 	
+	private static final Simbolo SIMBOLO_EOL = new Simbolo("EOL");
+	
 	private static final char[] CARACTERES_BLANCO = {' ', '\t', '\r', '\n'};
 	static {
 		// Requisito de la busqueda binaria: Arrays.binarySearch.
@@ -121,21 +123,25 @@ public class AnalizadorLexico {
 						break;
 					}
 				}
-				
 
 				// Se trata de encontrar el token en alguna de las categorías.
 				// Si no lo encuentra tokenActual sigue valiendo null.
 				Token tokenActual = null;
 				for (CategoriaLexica cl : categorias) {
+					int linea = lineaActual;
+					// El índice empieza en cero.
+					int columna = indiceCaracterActual + 1;
 					tokenActual = cl.aceptar();
 					if(tokenActual != null) {
+						tokenActual.setLinea(linea);
+						tokenActual.setColumna(columna);
 						break;
 					}
 				}
 				
 				// Si no se encontró ninguna categoría léxica se reporta el error.
 				if(tokenActual == null) {
-					errores.add(new Error(lineaActual, indiceCaracterActual,
+					errores.add(new Error(lineaActual, indiceCaracterActual + 1,
 						"No se ha encontrado una categoría léxica para el token"));
 					
 					if(!isCaracterBlanco(getCaracterActual())) {
@@ -155,13 +161,14 @@ public class AnalizadorLexico {
 
 	private void instalarTokenTablaSimbolos(Token token) {
 		Class<? extends CategoriaLexica> tipoToken = token.getTipoToken();
+		// Se reconocen los literales, los identificadores se recononcen
+		// posteriormente en el análisis semántico.
 		if(		tipoToken.equals(Flotante.class)
 			|| 	tipoToken.equals(Int.class)
-			|| 	tipoToken.equals(Identificador.class)
 			|| 	tipoToken.equals(Cadena.class)) {
-			String valor = tablaSimbolos.agregarSimbolo(tipoToken,
-				new Simbolo(token.getLexema()));
-			token.setValor(valor);
+			Simbolo simbolo = new Simbolo(token.getLexema());
+			tablaSimbolos.agregarSimbolo(simbolo);
+			token.setSimbolo(simbolo);
 		}
 		
 	}
@@ -171,7 +178,9 @@ public class AnalizadorLexico {
 		regresoBacktracking = 0;
 		lineaActual++;
 		// El primer avance no se cuenta como fin de linea.
-		if(lineaActual != 1) tokens.add(new Token(Eol.class, "\\n", "EOL"));
+		if(lineaActual != 1) {
+			tokens.add(new Token(Eol.class, "\\n", SIMBOLO_EOL));
+		}
 		cadenaAnalizar = codigoAnalizar[lineaActual - 1];
 	}
 

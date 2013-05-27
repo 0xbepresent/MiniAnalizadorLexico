@@ -31,7 +31,30 @@ public class NodoImplemetado implements Nodo {
 	public List<Nodo> getHijos() {
 		return hijos;
 	}
+
+	public void recorrerArbol(List<RunnableNodo> runnables) {
+		for (RunnableNodo runnable : runnables) {
+			runnable.run(this);
+		}
+		for (Nodo nodo : getHijos()) {
+			nodo.recorrerArbol(runnables);
+		}
+	}
 	
+	@Override
+	public Nodo buscarAncestro(Class<? extends CategoriaSintactica> categoriaSintactica) {
+	
+		Derivacion derivacionPadre = null;
+		Nodo nodoActual = this;
+		do {
+			derivacionPadre = (Derivacion) nodoActual.getPadre();
+			nodoActual = derivacionPadre;
+		} while (derivacionPadre != null && !derivacionPadre.getCategoriaSintactica().equals(categoriaSintactica));
+		
+		return derivacionPadre;
+	}
+	
+
 	@Override
 	public String toString() {
 		// Si es una categoría sintáctica.

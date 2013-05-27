@@ -21,7 +21,7 @@ OperadorRelacional => :: | !: | > | :> | < | :<
 OperadorAritmetico => + | - | * | / | %  
 OperadorBooleano   => && | ||  
 Booleano           => true | false  
-TipoDato           => int | double | string  
+TipoDato           => int | double | string | void 
 if  
 else  
 for  
@@ -76,7 +76,7 @@ De estructuras de control
 <If>                      ::= if ( <ExpresioBooleana> ) { EOL <ListaSentencias> } EOL else { EOL <ListaSentencias> } 
                             | if ( <ExpresioBooleana> ) { EOL <ListaSentencias> }
 
-<For>                     ::= for(TipoDato <Asignacion>; <ExpresionBooleana>; <Asignacion>) { EOL <ListaSentencias> }
+<For>                     ::= for(<Declaracion>; <ExpresionBooleana>; <Asignacion>) { EOL <ListaSentencias> }
 ```
 
 
@@ -100,6 +100,12 @@ De expresión
 
 [ChangeLog.md](ChangeLog.md)
 ------------
+
+Semántica
+---------
+
+* No está soportada la sobrecarga de métodos.
+* Las variables se definen de alcance de método o de alcance global.
 
 Comentarios
 ------------
@@ -141,10 +147,18 @@ puts(d)
 TODO
 ----
 
-- [ ] Distinguir el operador de suma del de concatenación.
-- [ ] Realizar una implementación en un branch que mejore el performance del compilador.
+- [x] Distinguir el operador de suma del de concatenación.
+- [ ] Realizar una implementación en otro branch que mejore el performance del compilador.
+- [ ] Corregir GIC de lista de parámetros.
+- [ ] Refactorizar las gramáticas independientes del contexto. Ej.: Los bloques de código no deberían tener `Eol` después de las llaves. `{ EOL <ListaSentencias> }`
+- [ ] Recuperación de errores semánticos (Modo pánico, producciones adicionales, recuperación a nivel de frase, etc.). 
+- [ ] Ponerle scroll al JTree.
+- [ ] Semántico: No reconocer variables en los métodos duplicados, las variables dentro de métodos duplicados están siendo reconocidos como variables de alcance global.
+- [ ] Semántico: Implementar más reglas semánticas.
+- [ ] Relacionar los tokens pertenecientes a los símbolos léxicos de tiras específicas.
 
-[Identificador]: http://www.debuggex.com/?re=%5Ba-zA-Z%5D%2B%5Cd%2A&flags=&str=identificador15
+
+[Identificador]: http://www.debuggex.com/r/el49ru8vsqfwPKj-
 [Cadena]: http://www.debuggex.com/?re=%22%5B+%5Cw%5D%2A%22&flags=&str=%22Ejemplo+de+cadena%22
 [Int]: http://www.debuggex.com/?re=%5Cd%2B&flags=&str=83498320
 [Flotante]: http://www.debuggex.com/?re=%5Cd%2B%5C.%5Cd%2B&flags=&str=12323.98

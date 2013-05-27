@@ -28,6 +28,7 @@ public class Identificador extends CategoriaLexicaBase {
 			
 			// Si se detuvo porque hay un digito siga consumiendo.
 			if(Character.isDigit(analizadorLexico.getCaracterActual())) {
+				lexema += analizadorLexico.getCaracterActual();
 				do {
 					// Se consume los caracteres alfabéticos y numéricos.
 					analizadorLexico.irSiguienteCaracter();

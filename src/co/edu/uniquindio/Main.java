@@ -42,6 +42,16 @@ public class Main {
 		
 		System.out.println(raiz);
 		
+		AnalizadorSemantico analizadorSemantico = new AnalizadorSemantico(raiz, tablaSimbolos);
+		analizadorSemantico.analizar();
+		System.out.println(String.format("Tabla de símbolos ---> Cantidad: %s, %s", tablaSimbolos.size(), tablaSimbolos));
+		
+		List<String> erroresSemanticos = analizadorSemantico.getErrores();
+		System.out.println("Errores semánticos: " + erroresSemanticos.size());
+		for (String error : erroresSemanticos) {
+			System.err.println(error);
+		}
+		
 		mostrarRepresentacionVisual(analizadorSintactico.getRepresentacionVisual());
 	}
 
