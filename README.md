@@ -126,15 +126,42 @@ Código ejemplo
 --------------
 
 ```
+int varibleDuplicada
+int varibleDuplicada
+
+void metodoDuplicado(){
+  puts("")
+}
+
+void metodoDuplicado(){
+  puts("")
+}
+
+void duplicacionInteriorMetodo() {
+  int a
+  int a
+}
+
 int a = 5
 double b = 7
 
 string c = "Algo"
 
 string some(){
+  string c = "Algo"
   c = c @ " mas otra cosa"
   if(c.length() > 3) {
     puts("De longitud mayor a tres")
+  }
+
+  c
+}
+
+string some1(){
+  string c = "Algo"
+  c = c @ " mas otra cosa"
+  for(int i = 0; i < 10; i = i + 1) {
+    puts(c)
   }
 
   c
