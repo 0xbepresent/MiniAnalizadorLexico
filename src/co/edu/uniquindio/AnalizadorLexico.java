@@ -179,7 +179,7 @@ public class AnalizadorLexico {
 		lineaActual++;
 		// El primer avance no se cuenta como fin de linea.
 		if(lineaActual != 1) {
-			tokens.add(new Token(Eol.class, "\\n", SIMBOLO_EOL));
+			tokens.add(new Token(Eol.class, "\n", SIMBOLO_EOL));
 		}
 		cadenaAnalizar = codigoAnalizar[lineaActual - 1];
 	}

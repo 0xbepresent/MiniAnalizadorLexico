@@ -14,12 +14,14 @@ public interface Nodo {
 	
 	public void setHijos(List<Nodo> hijos);
 	
-	public void recorrerArbol(List<RunnableNodo> runnables);
+	public void recorrerArbolPreOrden(List<RunnableNodo> runnables);
 	
 	public Nodo buscarAncestro(Class<? extends CategoriaSintactica> categoriaSintactica);
 	
 	public static interface RunnableNodo {
 		void run(Nodo nodo);
 	}
+	
+	public String traducir();
 
 }

@@ -1,5 +1,7 @@
 package co.edu.uniquindio;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,7 +13,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		final String CODIGO_ANALIZAR[] = new LectorFuente().leer(null); 
+		final String CODIGO_ANALIZAR[] = new ManejadorArchivos().leerCodigoFuente(null); 
 
 		System.out.println(Arrays.toString(CODIGO_ANALIZAR));
 		System.out.println();
@@ -52,7 +54,50 @@ public class Main {
 			System.err.println(error);
 		}
 		
-		mostrarRepresentacionVisual(analizadorSintactico.getRepresentacionVisual());
+		Traductor traductor = new Traductor(raiz, tablaSimbolos);
+		System.out.println();
+		System.out.println("Traducción");
+		String traduccion = traductor.traducir();
+		System.out.println(traduccion);
+		
+//		mostrarRepresentacionVisual(analizadorSintactico.getRepresentacionVisual());
+
+		ManejadorArchivos.escribirArchivo("traduccion.cpp", traduccion);
+		
+		System.out.println();
+		System.out.println("Ejecutando traducción...");
+		
+		System.out.println();
+		System.out.println("Salida:\n");
+		String salida = ejecutarTraduccion();
+		System.out.println(salida);
+	}
+
+	private static String ejecutarTraduccion() {
+		try {
+			Runtime rt = Runtime.getRuntime();
+			Process pr = rt.exec("g++ recursos/traduccion.cpp -o recursos/ejecutable.o");
+			pr.waitFor();
+			if(pr.exitValue() != 0) {
+				return "Falló la compilación de la traducción por el g++";
+			}
+			
+			pr = rt.exec("recursos/ejecutable.o");
+			pr.waitFor();
+			
+			BufferedReader stdInput = new BufferedReader(new 
+		             InputStreamReader(pr.getInputStream()));
+
+			String salida = "";
+			String linea = "";
+	        while ((linea = stdInput.readLine()) != null) {
+	        	salida += linea + "\n";
+	        }
+			return salida;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	private static void mostrarRepresentacionVisual(JTree representacionVisual) {

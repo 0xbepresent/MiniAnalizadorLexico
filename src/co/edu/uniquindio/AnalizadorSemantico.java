@@ -55,7 +55,7 @@ public class AnalizadorSemantico {
 	public void analizar() {
 		System.out.println("Analizando reglas semánticas...........");
 		System.out.println("\n");
-		raiz.recorrerArbol(runnables);
+		raiz.recorrerArbolPreOrden(runnables);
 	}
 	
 	private void reportarError(String error) {

@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 
 import co.edu.uniquindio.categoriassintacticas.CategoriaSintactica;
 
-public class NodoImplemetado implements Nodo {
+public abstract class NodoImplemetado implements Nodo {
 
 	protected Nodo padre;
 	
@@ -32,12 +32,12 @@ public class NodoImplemetado implements Nodo {
 		return hijos;
 	}
 
-	public void recorrerArbol(List<RunnableNodo> runnables) {
+	public void recorrerArbolPreOrden(List<RunnableNodo> runnables) {
 		for (RunnableNodo runnable : runnables) {
 			runnable.run(this);
 		}
 		for (Nodo nodo : getHijos()) {
-			nodo.recorrerArbol(runnables);
+			nodo.recorrerArbolPreOrden(runnables);
 		}
 	}
 	

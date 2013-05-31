@@ -13,9 +13,16 @@ public class Derivacion extends NodoImplemetado {
 	public Derivacion(Class<? extends CategoriaSintactica> categoria) {
 		this.categoriaSintactica = categoria;
 	}
-
-	public Class<? extends CategoriaSintactica> getCategoriaSintactica() {
-		return categoriaSintactica;
+	
+	@Override
+	public String traducir() {
+		try {
+			CategoriaSintactica categoriaSintactica = (CategoriaSintactica) this.categoriaSintactica.newInstance();
+			return categoriaSintactica.traducir(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 	
 	public int getTotalTokens() {
@@ -38,6 +45,10 @@ public class Derivacion extends NodoImplemetado {
 		else {
 			return totalTokens;
 		}
+	}
+
+	public Class<? extends CategoriaSintactica> getCategoriaSintactica() {
+		return categoriaSintactica;
 	}
 	
 }

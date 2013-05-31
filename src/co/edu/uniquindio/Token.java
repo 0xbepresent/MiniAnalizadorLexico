@@ -1,6 +1,7 @@
 package co.edu.uniquindio;
 
 import co.edu.uniquindio.categoriaslexicas.CategoriaLexica;
+import co.edu.uniquindio.categoriaslexicas.Eol;
 
 public class Token extends NodoImplemetado {
 	
@@ -19,6 +20,17 @@ public class Token extends NodoImplemetado {
 		this.tipoToken = tipoToken;
 		this.lexema = lexema;
 		this.simbolo = simbolo;
+	}
+	
+	@Override
+	public String traducir() {
+		try {
+			CategoriaLexica categoriaLexica = (CategoriaLexica) tipoToken.newInstance();
+			return categoriaLexica.traducir(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 	
 	public Class<? extends CategoriaLexica> getTipoToken() {
@@ -42,7 +54,7 @@ public class Token extends NodoImplemetado {
 		return
 			String.format("[TipoToken: %s, Lexema: %s, Símbolo: %s, Línea: %s, Columna: %s]"
 			, tipoToken.getSimpleName()
-			, lexema
+			, tipoToken.equals(Eol.class) ? "\\n" : lexema
 			, simbolo
 			, linea
 			, columna);

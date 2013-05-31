@@ -16,6 +16,7 @@ public interface CategoriaLexica {
 	 * @return Token aceptado, de lo contrario null.
 	 */
 	public Token aceptar();
-	
+
+	public String traducir(Token token);
 	
 }

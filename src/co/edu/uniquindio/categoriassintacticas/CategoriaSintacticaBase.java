@@ -23,7 +23,7 @@ public abstract class CategoriaSintacticaBase implements CategoriaSintactica {
 		/** Retorna la derivación siguiendo la prioridad establecida por el orden. */
 		PRIORIDAD_ORDEN_PRODUCCIONES
 	}
-
+	
 	@Override
 	public Derivacion construir(AnalizadorSintactico contexto) {
 		try {
@@ -123,6 +123,21 @@ public abstract class CategoriaSintacticaBase implements CategoriaSintactica {
 		
 		// Si no se encontró ninguna derivación se retorna null.
 		return null;
+	}
+	
+	@Override
+	public String traducir(Derivacion derivacion) {
+		String traduccion = "";
+		for (Nodo nodo : derivacion.getHijos()) {
+			// Separa todos los tokens por un espacio.
+			if (nodo instanceof Token) {
+				traduccion += " " + nodo.traducir();
+			}
+			else {
+				traduccion += nodo.traducir();
+			}
+		}
+		return traduccion;
 	}
 	
 }
